@@ -1,0 +1,53 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    /* height: 100%; */
+}
+
+#chat-window {
+    display           : grid;
+    grid-template-rows: 32px 1fr 32px;
+    height            : 100vh;
+    margin: 0px;
+    padding: 0px;
+}
+
+#toolbar {
+    grid-row        : 1;
+    background-color: antiquewhite;
+    margin: 2px;
+    padding: 0px;
+}
+
+#response {
+    grid-row        : 2;
+    overflow-y      : auto;
+    background-color: beige;
+    margin: 0px;
+    padding: 0px;
+}
+
+#request {
+    grid-row        : 3;
+    background-color: antiquewhite;
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    padding: 0px;
+    margin-bottom: 5px;
+}
+
+#input {
+    grid-column: 1;
+    height: 100%;
+    box-sizing: border-box;
+    margin-left: 2px;
+    padding: 0px;
+}
+
+#send {
+    grid-column: 2;
+    height: 100%;
+    box-sizing: border-box;
+    margin-right: 2px;
+    padding: 0px;
+}
