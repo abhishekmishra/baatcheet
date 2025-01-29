@@ -21,6 +21,9 @@ class UserText {
 class BotText {
   isThinking = false;
   currentLineDiv = null;
+  thinkingText = "Thinking...";
+  finalText = "";
+
   constructor() {
     this.parentDiv = document.getElementById("response");
     this.div = document.createElement("div");
@@ -37,42 +40,25 @@ class BotText {
     this.div.appendChild(this.finalOutputDiv);
     this.finalOutputDiv.style.display = "none";
 
-    this._createNewLine();
-  }
-
-  async _createNewLine() {
-    // if the current line div is not null, then convert its contents
-    // to markdown using marked, and replace with the markdown content.
-    if (this.currentLineDiv) {
-      this.currentLineDiv.innerHTML = marked.parse(this.currentLineDiv.innerHTML);
-    }
-
-    this.currentLineDiv = document.createElement("div");
-    this.currentLineDiv.className = "bot-text-line";
-    if (this.isThinking) {
-      this.thinkingDiv.appendChild(this.currentLineDiv);
-    } else {
-      this.finalOutputDiv.appendChild(this.currentLineDiv);
-    }
   }
 
   async _appendTextToCurrentLine(text) {
-    this.currentLineDiv.innerHTML += text;
+    if (this.isThinking) {
+      this.thinkingText += text;
+      this.thinkingDiv.innerHTML = this.thinkingText;
+      MathJax.typeset();
+      this.thinkingDiv.innerHTML = marked.parse(this.thinkingDiv.innerHTML);
+    } else {
+      this.finalText += text;
+      this.finalOutputDiv.innerHTML = this.finalText;
+      MathJax.typeset();
+      this.finalOutputDiv.innerHTML = marked.parse(this.finalOutputDiv.innerHTML);
+    }
   }
 
   async appendText(text) {
     // if length of text is 0, then return
     if (text.length === 0) {
-      return;
-    }
-
-    // if text contains a newline, then split the text by newline
-    // append first part, then create a new line, then append the rest
-    if (text.includes("\n")) {
-      const lines = text.split("\n");
-      await this._appendTextToCurrentLine(lines[0]);
-      await this._createNewLine();
-      await this.appendText(lines.slice(1).join("\n"));
       return;
     }
 
@@ -128,7 +114,7 @@ async function sendMessage() {
 
     // Append the bot's entry to the chat window
     await botText.appendText(json.message.content);
-    console.log(json.session_id, json.message.content);
+    // console.log(json.session_id, json.message.content);
   }
 }
 
