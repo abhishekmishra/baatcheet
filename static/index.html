@@ -13,15 +13,21 @@
       </div>
       <div id="response"></div>
       <div id="request">
-        <input type="text" id="input" placeholder="Type a message..." />
+        <input type="text" id="input" value="what is 2+3?" placeholder="Type a message..." />
         <button id="send">Send</button>
       </div>
     </div>
     <script>
-      window.onload = function() {
-        document.getElementById('input').focus();
+      window.onload = function () {
+        document.getElementById("input").focus();
       };
     </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
     <script src="lib/marked.min.js"></script>
     <script src="index.js"></script>
   </body>
