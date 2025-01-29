@@ -20,6 +20,7 @@ class UserText {
  */
 class BotText {
   isThinking = false;
+  currentLineDiv = null;
   constructor() {
     this.parentDiv = document.getElementById("response");
     this.div = document.createElement("div");
@@ -40,6 +41,12 @@ class BotText {
   }
 
   async _createNewLine() {
+    // if the current line div is not null, then convert its contents
+    // to markdown using marked, and replace with the markdown content.
+    if (this.currentLineDiv) {
+      this.currentLineDiv.innerHTML = marked.parse(this.currentLineDiv.innerHTML);
+    }
+
     this.currentLineDiv = document.createElement("div");
     this.currentLineDiv.className = "bot-text-line";
     if (this.isThinking) {
@@ -118,11 +125,10 @@ async function sendMessage() {
     // and append it to the response
     const text = new TextDecoder().decode(value);
     const json = JSON.parse(text);
-    const partial_content = json.message.content;
 
     // Append the bot's entry to the chat window
     await botText.appendText(json.message.content);
-    console.log(json.session_id, content);
+    console.log(json.session_id, json.message.content);
   }
 }
 
