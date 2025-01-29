@@ -39,6 +39,7 @@ class BotText {
     this.finalOutputDiv.className = "bot-text-final";
     this.div.appendChild(this.finalOutputDiv);
     this.finalOutputDiv.style.display = "none";
+    this.finalOutputDiv.style.overflowY = "auto"; // Enable scrolling
 
   }
 
@@ -54,6 +55,11 @@ class BotText {
       MathJax.typeset();
       this.finalOutputDiv.innerHTML = marked.parse(this.finalOutputDiv.innerHTML);
     }
+    this._scrollToBottom();
+  }
+
+  _scrollToBottom() {
+    this.parentDiv.scrollTop = this.parentDiv.scrollHeight;
   }
 
   async appendText(text) {
@@ -78,6 +84,7 @@ class BotText {
 
     // append the text to the current line
     this._appendTextToCurrentLine(text);
+    this._scrollToBottom();
   }
 }
 
