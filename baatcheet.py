@@ -1,14 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from ollama import AsyncClient, ChatResponse
 import json
 
 app = FastAPI()
 
+api_app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+# Create an API router
+api_router = APIRouter()
 
 
 async def ollama_chat(model, content, stream=True):
@@ -20,7 +21,12 @@ async def ollama_chat(model, content, stream=True):
         yield json.dumps(part.dict()).encode("utf-8")  # Convert part to dict and encode
 
 
-@app.get("/chat", response_model=ChatResponse)
+@api_router.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+
+@api_router.get("/chat", response_model=ChatResponse)
 async def chat():
     return StreamingResponse(
         ollama_chat(
@@ -28,3 +34,13 @@ async def chat():
             content="Why is the sky blue? Respond in one line. And don't overthink it.",
         )
     )
+
+
+# Include the API router under the /api path
+api_app.include_router(api_router)
+
+# Mount the API app to the /api path
+app.mount("/api", api_app)
+
+# Mount the static files directory to the root path
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
