@@ -1,8 +1,9 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Request
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from ollama import AsyncClient, ChatResponse
 import json
+import uuid
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -13,18 +14,20 @@ api_app = FastAPI()
 api_router = APIRouter()
 
 
-async def ollama_chat(model, content, stream=True):
+async def ollama_chat(sessionId, model, content, stream=True):
     message = {"role": "user", "content": content}
     async for part in await AsyncClient().chat(
         model=model, messages=[message], stream=stream
     ):
-        # print(part)
-        yield json.dumps(part.dict()).encode("utf-8")  # Convert part to dict and encode
+        partDict = part.dict()
+        partDict["session_id"] = sessionId
+        yield json.dumps(partDict).encode("utf-8")
 
 
 class ChatRequest(BaseModel):
     model: str
     content: str
+    session_id: str = None
 
 
 @api_router.get("/")
@@ -33,11 +36,15 @@ async def root():
 
 
 @api_router.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest):
+async def chat(request: Request):
+    body = await request.json()
+    session_id = body.get("session_id", str(uuid.uuid4()))
+    chat_request = ChatRequest(**body)
     return StreamingResponse(
         ollama_chat(
-            model=request.model,
-            content=request.content,
+            sessionId=session_id,
+            model=chat_request.model,
+            content=chat_request.content,
         )
     )
 

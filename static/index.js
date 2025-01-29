@@ -27,7 +27,7 @@ async function sendMessage() {
     // replace <think> with <i> and </think> with </i>
     const content = partial_content.replace(/<think>/g, "THINKING [").replace(/<\/think>/g, "] DONE THINKING");
     response.innerHTML += content;
-    console.log(content);
+    console.log(json.session_id, content);
   }
 }
 
