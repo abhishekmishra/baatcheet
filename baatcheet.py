@@ -3,6 +3,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from ollama import AsyncClient, ChatResponse
 import json
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -21,17 +22,22 @@ async def ollama_chat(model, content, stream=True):
         yield json.dumps(part.dict()).encode("utf-8")  # Convert part to dict and encode
 
 
+class ChatRequest(BaseModel):
+    model: str
+    content: str
+
+
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
 
 
-@api_router.get("/chat", response_model=ChatResponse)
-async def chat():
+@api_router.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
     return StreamingResponse(
         ollama_chat(
-            model="deepseek-r1:1.5b",
-            content="Why is the sky blue? Respond in one line. And don't overthink it.",
+            model=request.model,
+            content=request.content,
         )
     )
 

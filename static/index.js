@@ -1,11 +1,18 @@
-// when the user clicks the button with id "send"
-// call the /api/chat endpoint and stream the response to the
-// div with id "response"
-
-document.getElementById("send").addEventListener("click", async () => {
+async function sendMessage() {
   const response = document.getElementById("response");
   response.innerHTML = "";
-  const stream = await fetch("/api/chat");
+
+  const model = "deepseek-r1:1.5b"; // You can change this as needed
+  const content = document.getElementById("input").value; // Get the value from the input div
+
+  const stream = await fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ model, content }),
+  });
+
   const reader = stream.body.getReader();
   while (true) {
     const { done, value } = await reader.read();
@@ -21,7 +28,13 @@ document.getElementById("send").addEventListener("click", async () => {
     const content = partial_content.replace(/<think>/g, "THINKING [").replace(/<\/think>/g, "] DONE THINKING");
     response.innerHTML += content;
     console.log(content);
+  }
+}
 
-    // response.innerHTML += new TextDecoder().decode(value);
+document.getElementById("send").addEventListener("click", sendMessage);
+
+document.getElementById("input").addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    sendMessage();
   }
 });
