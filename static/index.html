@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BaatCheet</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="libs/bulma.min.css">
   </head>
-  <body class="app">
-    <div id="chat-window" class="chat-window">
+  <!-- The body has flex grid and flex direction column, and fills the height -->
+  <body class="app is-flex is-flex-direction-column is-fullheight">
+    <!-- The chat window fills the body and is also a flex container. -->
+    <div id="chat-window" class="chat-window is-flex-grow-1 is-flex is-flex-direction-column is-fullheight">
       <div id="toolbar" class="toolbar">
         <button type="button" class="newchat" id="newchat">
           New Chat ➕
         </button>
       </div>
 
-      <div id="response" class=""></div>
+      <!-- response is a flex container which grows -->
+      <div id="response" class="is-flex-grow-1"></div>
 
       <div id="request" class="">
         <div class="">
