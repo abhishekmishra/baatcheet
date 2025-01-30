@@ -51,3 +51,20 @@ html, body {
     margin-right: 2px;
     padding: 0px;
 }
+
+.user-text {
+    background-color: lightblue;
+    text-align: right;
+    padding: 5px;
+    margin: 5px;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+.bot-text-thinking {
+    color: gray;
+}
+
+.bot-text-final {
+    background-color: whitesmoke;
+}
