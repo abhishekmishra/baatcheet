@@ -1,3 +1,5 @@
+let currentChatSession = null;
+
 /**
  * Implements a user text entry which shows up in the chat window.
  */
@@ -40,7 +42,6 @@ class BotText {
     this.div.appendChild(this.finalOutputDiv);
     this.finalOutputDiv.style.display = "none";
     this.finalOutputDiv.style.overflowY = "auto"; // Enable scrolling
-
   }
 
   async _appendTextToCurrentLine(text) {
@@ -53,7 +54,9 @@ class BotText {
       this.finalText += text;
       this.finalOutputDiv.innerHTML = this.finalText;
       MathJax.typeset();
-      this.finalOutputDiv.innerHTML = marked.parse(this.finalOutputDiv.innerHTML);
+      this.finalOutputDiv.innerHTML = marked.parse(
+        this.finalOutputDiv.innerHTML
+      );
     }
     this._scrollToBottom();
   }
@@ -88,42 +91,86 @@ class BotText {
   }
 }
 
-async function sendMessage() {
-  const response = document.getElementById("response");
-  response.innerHTML = "";
-
-  const model = "deepseek-r1:1.5b"; // You can change this as needed
-  const content = document.getElementById("input").value; // Get the value from the input div
-
-  // Append the user's entry to the chat window
-  new UserText(content);
-
-  const botText = new BotText();
-
-  const stream = await fetch("/api/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ model, content }),
-  });
-
-  const reader = stream.body.getReader();
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) {
-      break;
-    }
-    // read the json response and get [message][content]
-    // and append it to the response
-    const text = new TextDecoder().decode(value);
-    const json = JSON.parse(text);
-
-    // Append the bot's entry to the chat window
-    await botText.appendText(json.message.content);
-    // console.log(json.session_id, json.message.content);
+class UserRequest {
+  dateTime = null;
+  text = null;
+  constructor(text) {
+    this.text = text;
+    this.dateTime = new Date();
   }
 }
+
+class BotResponse {}
+
+class ChatSession {
+  chatHistory = [];
+  session_id = null;
+  currentRequest = null;
+  currentResponse = null;
+
+  constructor() {}
+
+  userRequest(text) {
+    this.currentRequest = new UserRequest(text);
+    this.currentResponse = null;
+    this.chatHistory.push(this.currentRequest);
+  }
+
+  botResponse(text) {
+    this.currentResponse = new BotResponse(text);
+    this.chatHistory.push(this.currentRequest);
+  }
+
+  async sendMessage() {
+    const response = document.getElementById("response");
+    response.innerHTML = "";
+
+    const model = "deepseek-r1:1.5b"; // You can change this as needed
+    const content = document.getElementById("input").value; // Get the value from the input div
+
+    // Append the user's entry to the chat window
+    new UserText(content);
+
+    const botText = new BotText();
+
+    const stream = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ model, content }),
+    });
+
+    const reader = stream.body.getReader();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      // read the json response and get [message][content]
+      // and append it to the response
+      const text = new TextDecoder().decode(value);
+      const json = JSON.parse(text);
+
+      // Append the bot's entry to the chat window
+      await botText.appendText(json.message.content);
+      // console.log(json.session_id, json.message.content);
+    }
+  }
+}
+
+function newChatSession() {
+  currentChatSession = new ChatSession();
+}
+
+function sendMessage() {
+  if (currentChatSession === null) {
+    newChatSession();
+  }
+  currentChatSession.sendMessage();
+}
+
+document.getElementById("newchat").addEventListener("click", newChatSession);
 
 document.getElementById("send").addEventListener("click", sendMessage);
 
