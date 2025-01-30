@@ -1,23 +1,46 @@
-.app {
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    /* width: 100vw; */
+    overflow-y: hidden;
 }
 
-.user-text {
-    /* background-color: lightblue;
-    text-align      : right;
-    font-style      : italic;
-    font-size       : 1.2em; */
+.toolbar {
+    height: 60px;
+    background: #333;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevents shrinking */
 }
 
-.bot-text-thinking {
-    /* color: gray; */
+.response-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-y: auto;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-.bot-text-final {
-    /* background-color: whitesmoke; */
+.response {
+    flex: 1;
+    width: 100%;
+    padding-bottom: 5rem;
+    /* overflow-y: auto; */
+}
+
+.extra {
+    flex: 1;
 }
 
 .request {
