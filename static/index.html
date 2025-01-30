@@ -9,18 +9,18 @@
   </head>
   <body>
     <div id="chat-window">
-      <div id="toolbar">
-        <button id="newchat">New Chat ➕</button>
+      <div id="toolbar" class="text-bg-dark p-1">
+        <button type="button" class="btn btn-primary btn-sm" id="newchat">New Chat ➕</button>
       </div>
       <div id="response"></div>
-      <div id="request">
+      <div id="request" class="text-bg-dark p-1">
         <input
           type="text"
           id="input"
           value="what is 2+3?"
           placeholder="Type a message..."
         />
-        <button id="send">Send</button>
+        <button type="button" class="btn btn-primary" id="send">Send</button>
       </div>
     </div>
     <script>

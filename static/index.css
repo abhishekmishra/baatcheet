@@ -6,7 +6,7 @@ html, body {
 
 #chat-window {
     display           : grid;
-    grid-template-rows: 32px 1fr 32px;
+    grid-template-rows: 40px 1fr 40px;
     height            : 100vh;
     margin: 0px;
     padding: 0px;
@@ -14,9 +14,6 @@ html, body {
 
 #toolbar {
     grid-row        : 1;
-    background-color: antiquewhite;
-    margin: 2px;
-    padding: 0px;
 }
 
 #response {
@@ -29,11 +26,8 @@ html, body {
 
 #request {
     grid-row        : 3;
-    background-color: antiquewhite;
     display: grid;
     grid-template-columns: 1fr 100px;
-    padding: 0px;
-    margin-bottom: 5px;
 }
 
 #input {
