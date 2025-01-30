@@ -8,48 +8,56 @@
     <link rel="stylesheet" href="libs/bulma.min.css" />
   </head>
   <!-- The body has flex grid and flex direction column, and fills the height -->
-  <body class="app is-flex is-flex-direction-column is-fullheight">
-    <!-- The chat window fills the body and is also a flex container. -->
-    <div
-      id="chat-window"
-      class="chat-window is-flex-grow-1 is-flex-shrink-0 is-flex is-flex-direction-column is-fullheight"
-    >
-      <div id="toolbar" class="toolbar">
+  <body class="app is-fullheight">
+    <div class="columns">
+      <div class="column is-2">
+        BaatCheet
+        <br />
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cum pariatur
+        earum saepe consequatur eveniet perspiciatis labore iste quis tempora
+        vel veritatis et, ad sapiente quod laborum error eaque perferendis
+        tempore?
       </div>
-
-      <!-- response is a flex container which grows -->
+      <!-- The chat window fills the body and is also a flex container. -->
       <div
-        id="response-container"
-        class="content is-flex-grow-1 is-flex-shrink-1 mgb-large"
+        id="chat-window"
+        class="chat-window column is-10 is-flex is-flex-direction-column"
       >
-        <div id="response"></div>
-        <div>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-        </div>
-      </div>
+        <div id="toolbar" class="toolbar"></div>
 
-      <div id="request" class="request is-flex">
-        <div class="is-flex-grow-3">
-          <input
-            class="input is-primary"
-            type="text"
-            id="input"
-            value="what is 2+3?"
-            placeholder="Type a message..."
-          />
+        <!-- response is a flex container which grows -->
+        <div
+          id="response-container"
+          class="content is-flex-grow-1 is-flex-shrink-1 mgb-large"
+        >
+          <div id="response"></div>
+          <div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </div>
         </div>
-        <div class="is-flex-grow-1">
-          <button type="button" class="button is-primary" id="send">
-            Send↩️
-          </button>
-          <button type="button" class="button is-primary" id="newchat">
-            New ➕
-          </button>
-  
+
+        <div id="request" class="request is-flex">
+          <div class="is-flex-grow-3">
+            <input
+              class="input is-primary"
+              type="text"
+              id="input"
+              value="what is 2+3?"
+              placeholder="Type a message..."
+            />
+          </div>
+          <div class="is-flex-grow-1">
+            <button type="button" class="button is-primary" id="send">
+              Send↩️
+            </button>
+            <button type="button" class="button is-primary" id="newchat">
+              New ➕
+            </button>
+          </div>
         </div>
       </div>
     </div>
