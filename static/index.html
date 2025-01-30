@@ -10,28 +10,28 @@
   <!-- The body has flex grid and flex direction column, and fills the height -->
   <body class="app is-flex is-flex-direction-column is-fullheight">
     <!-- The chat window fills the body and is also a flex container. -->
-    <div id="chat-window" class="chat-window is-flex-grow-1 is-flex is-flex-direction-column is-fullheight">
+    <div id="chat-window" class="chat-window is-flex-grow-1 is-flex-shrink-0 is-flex is-flex-direction-column is-fullheight">
       <div id="toolbar" class="toolbar">
-        <button type="button" class="newchat" id="newchat">
+        <button type="button" class="button is-primary" id="newchat">
           New Chat ➕
         </button>
       </div>
 
       <!-- response is a flex container which grows -->
-      <div id="response" class="is-flex-grow-1"></div>
+      <div id="response" class="content is-flex-grow-1 is-flex-shrink-1"></div>
 
-      <div id="request" class="">
-        <div class="">
+      <div id="request" class="request is-flex">
+        <div class="is-flex-grow-3">
           <input
-            class=""
+            class="input is-primary"
             type="text"
             id="input"
             value="what is 2+3?"
             placeholder="Type a message..."
           />
         </div>
-        <div class="">
-          <button type="button" class="" id="send">Send</button>
+        <div class="is-flex-grow-1">
+          <button type="button" class="button is-primary" id="send">Send</button>
         </div>
       </div>
     </div>

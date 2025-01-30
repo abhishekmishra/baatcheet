@@ -8,7 +8,7 @@ class UserText {
     this.text = text;
     this.parentDiv = document.getElementById("response");
     this.div = document.createElement("div");
-    this.div.className = "user-text";
+    this.div.className = "user-text block is-italic is-family-primary has-text-right is-size-5";
     this.div.innerHTML = text;
     this.parentDiv.appendChild(this.div);
   }
@@ -32,13 +32,13 @@ class BotText {
     this.div.className = "bot-text";
     this.parentDiv.appendChild(this.div);
     this.thinkingDiv = document.createElement("div");
-    this.thinkingDiv.className = "bot-text-thinking";
+    this.thinkingDiv.className = "bot-text-thinking block is-italic is-family-secondary has-text-left is-size-6 has-text-grey	";
     this.thinkingDiv.innerHTML = "Thinking...";
     this.div.appendChild(this.thinkingDiv);
     this.thinkingDiv.style.display = "none";
 
     this.finalOutputDiv = document.createElement("div");
-    this.finalOutputDiv.className = "bot-text-final";
+    this.finalOutputDiv.className = "bot-text-final  block is-font-primary has-text-left is-size-5";
     this.div.appendChild(this.finalOutputDiv);
     this.finalOutputDiv.style.display = "none";
     this.finalOutputDiv.style.overflowY = "auto"; // Enable scrolling
