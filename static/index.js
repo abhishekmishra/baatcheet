@@ -65,11 +65,9 @@ class BotText {
   }
 
   _scrollToBottom() {
-    // get the scroll height of the window
-    const scrollHeight = document.body.scrollHeight;
-
-    // scroll to the bottom of webpage
-    window.scrollTo(0, scrollHeight);
+    // scroll the div with id "response-container" to the bottom
+    const responseContainer = document.getElementById("response-container");
+    responseContainer.scrollTop = responseContainer.scrollHeight;
   }
 
   async appendText(text) {
