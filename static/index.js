@@ -138,12 +138,18 @@ class ChatSession {
 
     const botText = new BotText();
 
+    const requestObj = { model, content };
+    if (this.session_id) {
+      requestObj.session_id = this.session_id;
+    }
+    console.log("Requesting", requestObj);
+
     const stream = await fetch("/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ model, content }),
+      body: JSON.stringify(requestObj),
     });
 
     const reader = stream.body.getReader();
@@ -154,13 +160,27 @@ class ChatSession {
       }
       // read the json response and get [message][content]
       // and append it to the response
-      const text = new TextDecoder().decode(value);
-      const json = JSON.parse(text);
+      const responseText = new TextDecoder().decode(value);
+      const responseJson = JSON.parse(responseText);
+      
+      // if responseJson has session_id and it is different from the current session_id, then set the current session_id
+      if (responseJson.session_id && this.session_id !== responseJson.session_id) {
+        this.setSessionId(responseJson.session_id);
+      }
 
       // Append the bot's entry to the chat window
-      await botText.appendText(json.message.content);
+      await botText.appendText(responseJson.message.content);
       // console.log(json.session_id, json.message.content);
     }
+  }
+
+  setSessionId(session_id) {
+    this.session_id = session_id;
+    // append the session id to the url as /c/<session_id>
+    const url = new URL(window.location.href);
+    url.pathname = `/c/${session_id}`;
+    // update the url
+    window.history.pushState({}, "", url);
   }
 }
 
