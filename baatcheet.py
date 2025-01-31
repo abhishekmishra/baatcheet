@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from ollama import AsyncClient, ChatResponse
 import json
 import uuid
@@ -56,4 +57,18 @@ api_app.include_router(api_router)
 app.mount("/api", api_app)
 
 # Mount the static files directory to the root path
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
+
+@app.get("/c/{session_id}", response_class=HTMLResponse)
+async def chat_page(request: Request, session_id: str):
+    return templates.TemplateResponse(
+        request=request, name="chat.html", context={"session_id": session_id}
+    )
+
+
+@app.get("/", response_class=HTMLResponse)
+async def chat_page_without_session_id(request: Request):
+    return templates.TemplateResponse(request=request, name="chat.html", context={})
